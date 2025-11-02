@@ -11,6 +11,8 @@ public:
 
   bool write(String text);
   String read();
-};
 
+private:
+  WiFiServer server;
+};
 #endif
