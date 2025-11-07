@@ -1,8 +1,8 @@
 //步进电机所使用的引脚
 
-#define I2S_OUT_BCK             GPIO_NUM_22
-#define I2S_OUT_WS              GPIO_NUM_17
-#define I2S_OUT_DATA            GPIO_NUM_21
+#define I2S_OUT_BCK             22
+#define I2S_OUT_WS              17
+#define I2S_OUT_DATA            21
 
 #define PINS_X 0b1000001
 #define PINS_Y 0b1000010

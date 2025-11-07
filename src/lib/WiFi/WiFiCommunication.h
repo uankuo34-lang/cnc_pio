@@ -12,7 +12,10 @@ public:
   bool write(String text);
   String read();
 
+  bool exit();
+
 private:
-  WiFiServer server;
+  WiFiServer _server;
+  WiFiClient _client;
 };
 #endif

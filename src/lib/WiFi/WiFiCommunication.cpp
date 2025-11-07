@@ -1,6 +1,6 @@
 #include "WiFiCommunication.h"
 
-WiFiCommunication::WiFiCommunication(String ssid, String password):server(8080){
+WiFiCommunication::WiFiCommunication(String ssid, String password):_server(8080){
     Serial.println("wifi 已启动");
 
     WiFi.mode(WIFI_STA);
@@ -8,7 +8,7 @@ WiFiCommunication::WiFiCommunication(String ssid, String password):server(8080){
 
     short time = 30;
     while (WiFi.status() != WL_CONNECTED){
-        delay(500);
+        vTaskDelay(500);
         Serial.print(".");
         time--;
         if(time == 0){
@@ -20,34 +20,58 @@ WiFiCommunication::WiFiCommunication(String ssid, String password):server(8080){
         return;
     }
     else{
-        Serial.println("链接成功");
+        Serial.println("连接成功");
         Serial.print("设备Wi-Fi地址:");
         Serial.println(WiFi.localIP());
         Serial.println();
 
-        server.begin();
+        _server.begin();
         Serial.println("服务器已启动");
         Serial.print("服务器端口为:");
         Serial.println("8080");
+        
+        while (!_client){
+
+            WiFiClient client = _server.available();
+            if(client){
+                _client = client;
+                Serial.println("客户端已连接");
+                break;
+            }
+            vTaskDelay(500);
+            Serial.print(".");
+        }
     }
 }
 bool WiFiCommunication::write(String text){
+    
+    if (_client.connected()){
+        Serial.print("发送给客户端的指令为:");
+        Serial.println(text);
 
-    WiFiClient client = server.available();
-
-    if(client){
-        while (client.connected()){
-            Serial.print("发送给客户端的指令为:");
-            Serial.println(text);
-
-            client.print(millis());
-            client.println(text);
-        }
-
-        client.stop();
-        Serial.println("客户端已断开链接");
+        _client.print(millis());
+        _client.print(" >>> ");
+        _client.println(text);
 
         return true;
     }
     return false;
+}
+
+String WiFiCommunication::read(){
+
+    if (_client.connected()){
+        String text = _client.readString();
+        if (text.length() > 0){
+            return text;
+        }
+    }
+    return "";
+}
+
+bool WiFiCommunication::exit(){
+    _client.stop();
+    Serial.println("客户端已断开链接");
+
+    return true;
 }

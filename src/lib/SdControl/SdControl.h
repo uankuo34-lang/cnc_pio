@@ -15,10 +15,9 @@ public:
   StringList read(String addess);
 
 private:
-  SdFs sd;
-  FsFile file;
-  SPIClass sd_spi;
-  StringList strlist;
+  SdFs _sd;
+  FsFile _file;
+  SPIClass _sd_spi;
 };
 
 #endif
