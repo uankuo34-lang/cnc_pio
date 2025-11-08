@@ -18,3 +18,5 @@
 #define SDCARD_SS_PIN 15    // 片选引脚 (Chip Select)
 
 #define SPI_CLOCK SD_SCK_MHZ(4) // SD卡通信速度 (4MHz)
+
+using StringList = std::vector<String>;

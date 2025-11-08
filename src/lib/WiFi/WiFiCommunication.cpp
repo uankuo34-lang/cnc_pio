@@ -35,7 +35,7 @@ WiFiCommunication::WiFiCommunication(String ssid, String password):_server(8080)
             WiFiClient client = _server.available();
             if(client){
                 _client = client;
-                Serial.println("客户端已连接");
+                Serial.println("\n客户端已连接");
                 break;
             }
             vTaskDelay(500);
@@ -58,15 +58,29 @@ bool WiFiCommunication::write(String text){
     return false;
 }
 
-String WiFiCommunication::read(){
+StringList WiFiCommunication::read(){
 
     if (_client.connected()){
-        String text = _client.readString();
-        if (text.length() > 0){
-            return text;
+
+        StringList data = {};
+        while(true){
+            String text = _client.readStringUntil(' ');
+            if (text.length() > 1){
+                if(text[text.length()-1] == '\n'){
+                    text = text.substring(0, text.length()-2);
+                }
+                else{
+                    text=text.substring(0, text.length()-1);
+                }
+                data.push_back(text);
+            }
+            else{
+                break;
+            }
         }
+        return data;
     }
-    return "";
+    return {"0"};
 }
 
 bool WiFiCommunication::exit(){

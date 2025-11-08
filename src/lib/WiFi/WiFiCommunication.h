@@ -3,14 +3,14 @@
 
 // 引入必要的库
 #include "lib/lib/lib.h"
-#include "lib/pins/pins.h"
+#include "lib/deploy/deploy.h"
 
 class WiFiCommunication {
 public:
   WiFiCommunication(String ssid, String password);
 
   bool write(String text);
-  String read();
+  StringList read();
 
   bool exit();
 

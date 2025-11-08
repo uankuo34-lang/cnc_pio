@@ -3,9 +3,7 @@
 
 // 引入必要的库
 #include "lib/lib/lib.h"
-#include "lib/pins/pins.h"
-
-using StringList = std::vector<String>;
+#include "lib/deploy/deploy.h"
 
 class SdControl {
 public:

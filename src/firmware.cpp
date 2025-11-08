@@ -6,15 +6,26 @@ void setup(){
     Serial.println("程序已起动");
     WiFiCommunication WiFiCommunication("CMCC-Wm2n", "ghzbv5g8");
 
-    for(int i=200; i >= 0; i--){
-      String text = WiFiCommunication.read();
-      Serial.println(text);
-      vTaskDelay(500);
-    }
+    while(true){
+      StringList text = WiFiCommunication.read();
 
-    WiFiCommunication.exit();
-    Serial.println("客户端已断开链接");
+      if(text.size() > 0){
+        for(int i=text.size()-1; i >= 0; i--){
+
+        Serial.println(text[i]);
+        Serial.print("  ");
+
+        if(text[i] == "exit()"){
+          WiFiCommunication.exit();
+          return;
+        }
+      }
+      Serial.println("");
+      vTaskDelay(250);
+      }
+    }
 }
 void loop(){
   //TODO
 }
+

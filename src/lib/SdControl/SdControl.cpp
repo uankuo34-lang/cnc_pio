@@ -31,7 +31,7 @@ bool SdControl::write(String addess, StringList text){
 
 StringList SdControl::read(String addess){
   _file = _sd.open(addess.c_str(), FILE_READ);
-  std::vector<String> data = {};
+  StringList data = {};
 
   while(_file.available()){
     String line = _file.readStringUntil('\n');
