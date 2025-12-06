@@ -8,9 +8,6 @@ u_int8_t PINS_X_A = 0b00000000;
 u_int8_t PINS_X_B = 0b01000000;
 
 
-
-
-
 void setup(){
     pinMode(I2S_OUT_BCK, OUTPUT);
     pinMode(I2S_OUT_WS, OUTPUT);
