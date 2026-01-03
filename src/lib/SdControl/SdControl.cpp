@@ -8,6 +8,7 @@ SdControl::SdControl() : _sd_spi(HSPI){
     Serial.println("SD卡启动失败");
     _sd.initErrorHalt();
   }
+  Serial.print("SD卡已启动");
 }
 
 bool SdControl::write(String addess, StringList text){
@@ -26,7 +27,7 @@ bool SdControl::write(String addess, StringList text){
 
   Serial.println("写入成功");
   _file.close();
-  return true; 
+  return true;
 }
 
 StringList SdControl::read(String addess){
@@ -36,10 +37,10 @@ StringList SdControl::read(String addess){
   while(_file.available()){
     String line = _file.readStringUntil('\n');
 
-    Serial.println(line);   
+    Serial.println(line);
     data.push_back(line);
   }
-  
+
   _file.close();
   return data;
 }

@@ -1,0 +1,1 @@
+st.line_chart(df)

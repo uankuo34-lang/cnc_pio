@@ -1,50 +1,62 @@
 #include "lib/MotorControl/MotorControl.h"
 
-
 MotorControl::MotorControl(){
 
+    pinMode(I2S_OUT_BCK, OUTPUT);
+    pinMode(I2S_OUT_WS, OUTPUT);
+    pinMode(I2S_OUT_DATA, OUTPUT);
+
+    Serial.print("步进电机 已启动");
 }
 
-bool MotorControl::stepper_x(double distance, int speed, int step_length){
-  Serial.println("stepper_x");
-  for(int i=0; i < (int)(distance/step_length); i++){       //横坐标移动距离 Step = L/l
 
-    digitalWrite(I2S_OUT_WS, LOW); 
-    shiftOut(I2S_OUT_DATA, I2S_OUT_BCK, LSBFIRST, PINS_X);
-    delay(SPEED-speed);
+bool MotorControl::_writer(int16_t code, int speed){
+    digitalWrite(I2S_OUT_WS, LOW);
+    shiftOut(I2S_OUT_DATA, I2S_OUT_BCK, LSBFIRST, code);
     digitalWrite(I2S_OUT_WS, HIGH);
-    shiftOut(I2S_OUT_DATA, I2S_OUT_BCK, LSBFIRST, VOID);
-    delay(SPEED-speed);
+    delayMicroseconds(SPEED-speed);
+
+    digitalWrite(I2S_OUT_WS, LOW);
+    shiftOut(I2S_OUT_DATA, I2S_OUT_BCK, LSBFIRST, NONE);
     digitalWrite(I2S_OUT_WS, HIGH);
-  }
-  return true;
+    delayMicroseconds(SPEED-speed);
+
+    return true;
 }
 
-bool MotorControl::stepper_y(double distance, int speed, int step_length){
-  Serial.println("stepper_y");
-  for(int i=0; i < (int)(distance/step_length); i++){       //纵坐标移动距离 Step = L/l
+//步进电机单步控制函数
 
-    digitalWrite(I2S_OUT_WS, LOW); 
-    shiftOut(I2S_OUT_DATA, I2S_OUT_BCK, LSBFIRST, PINS_Y);
-    delay(SPEED-speed);
-    digitalWrite(I2S_OUT_WS, HIGH);
-    shiftOut(I2S_OUT_DATA, I2S_OUT_BCK, LSBFIRST, VOID);
-    delay(SPEED-speed);
-    digitalWrite(I2S_OUT_WS, HIGH);
-  }
-  return true;
+bool MotorControl::_stepper_X(int speed, int dir){
+    _writer(PINS_X+(dir*DIR_X), speed);
+    return true;
 }
 
-bool MotorControl::stepper_z(double distance, int speed, int step_length){
-  Serial.println("stepper_z");
-  for(int i=0; i < (int)(distance/step_length); i++){       //高坐标移动距离 Step = L/l
+bool MotorControl::_stepper_Z(int speed, int dir){
+    _writer(PINS_Z+(dir*DIR_Z), speed);
+    return true;
+}
 
-    digitalWrite(I2S_OUT_WS, LOW); 
-    shiftOut(I2S_OUT_DATA, I2S_OUT_BCK, MSBFIRST, PINS_Z);
-    delay(SPEED-speed);
-    shiftOut(I2S_OUT_DATA, I2S_OUT_BCK, MSBFIRST, VOID);
-    digitalWrite(I2S_OUT_WS, HIGH);
-    delay(SPEED-speed);
-  }
-  return true;
+bool MotorControl::_stepper_Y(int speed, int dir){
+    _writer(PINS_Y+(dir*DIR_Y), speed);
+    return true;
+}
+
+bool MotorControl::_stepper_XY(int speed, int dir_x, int dir_y){
+    _writer(PINS_X+(dir_x*DIR_X) + PINS_Y+(dir_y*DIR_Y), speed);
+    return true;
+}
+
+bool MotorControl::_stepper_XZ(int speed, int dir_x, int dir_z){
+    _writer(PINS_X+(dir_x*DIR_X) + PINS_Z+(dir_z*DIR_Z), speed);
+    return true;
+}
+
+bool MotorControl::_stepper_YZ(int speed, int dir_y, int dir_z){
+    _writer(PINS_Y+(dir_y*DIR_Y) + PINS_Z+(dir_z*DIR_Z), speed);
+    return true;
+}
+
+bool MotorControl::_stepper_XYZ(int speed, int dir_x, int dir_y, int dir_z){
+    _writer(PINS_X+(dir_x*DIR_X) + PINS_Y+(dir_y*DIR_Y) + PINS_Z+(dir_z*DIR_Z), speed);
+    return true;
 }
