@@ -11,10 +11,19 @@ SdControl::SdControl() : _sd_spi(HSPI){
   Serial.print("SD卡已启动");
 }
 
-bool SdControl::write(String addess, StringList text){
+bool SdControl::begin(String addess, String mode){
+  if(mode == "w"){
+    _file = _sd.open(addess.c_str(), FILE_WRITE);
+    return true;
+  }
+  else if(mode == "r"){
+    _file = _sd.open(addess.c_str(), FILE_READ);
+    return true;
+  }
+  return false;
+}
 
-  _file = _sd.open(addess.c_str(), FILE_WRITE);     //打开文件 如果没有就创建
-
+bool SdControl::write(StringList text){
   if(!_file){
     Serial.println("文件打开失败");
     return false;
@@ -30,8 +39,7 @@ bool SdControl::write(String addess, StringList text){
   return true;
 }
 
-StringList SdControl::read(String addess){
-  _file = _sd.open(addess.c_str(), FILE_READ);
+StringList SdControl::read(){
   StringList data = {};
 
   while(_file.available()){
@@ -44,4 +52,14 @@ StringList SdControl::read(String addess){
   _file.close();
   return data;
 }
+
+String SdControl::read_line(){
+
+  String data = _file.readStringUntil('\n');
+
+  Serial.println(data);
+
+  return data;
+}
+
 

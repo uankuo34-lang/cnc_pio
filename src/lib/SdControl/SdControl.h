@@ -9,8 +9,10 @@ class SdControl {
 public:
   SdControl();
 
-  bool write(String addess, StringList text);
-  StringList read(String addess);
+  bool begin(String addess, String mode);
+  bool write(StringList text);
+  StringList read();
+  String read_line();
 
 private:
   SdFs _sd;

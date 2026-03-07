@@ -15,3 +15,7 @@
 #include "freertos/task.h"
 
 #include <unordered_map>
+
+#include <algorithm>
+
+#include <GCodeParser.h>
