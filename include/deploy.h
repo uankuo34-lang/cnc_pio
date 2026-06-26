@@ -1,6 +1,10 @@
 using StringList = std::vector<String>;
 using NumList = std::vector<int>;
+
+using NumListTwo = std::array<int, 2>;
 using NumListThree = std::array<int, 3>;
+
+// using namespace RTOS::Tasks;
 
 //步进电机所使用的引脚
 #define I2S_OUT_BCK             16

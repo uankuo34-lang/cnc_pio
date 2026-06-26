@@ -1,4 +1,4 @@
-#include "lib/SdControl/SdControl.h"
+#include "SdControl.h"
 
 SdControl::SdControl() : _sd_spi(HSPI){
   _sd_spi.begin(SDCARD_SCK_PIN, SDCARD_MISO_PIN, SDCARD_MOSI_PIN, -1);     //初始化主办SD卡所在管线的SPI

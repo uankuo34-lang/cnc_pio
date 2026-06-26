@@ -1,6 +1,10 @@
 #include "WiFiCommunication.h"
 
-WiFiCommunication::WiFiCommunication(String ssid, String password):_server(8080){
+WiFiCommunication::WiFiCommunication(){
+    Serial.println("wifi 使用");
+}
+
+bool WiFiCommunication::begin(String ssid, String password){
     Serial.println("wifi 已启动");
 
     WiFi.mode(WIFI_STA);
@@ -17,7 +21,7 @@ WiFiCommunication::WiFiCommunication(String ssid, String password):_server(8080)
     }
     if(time == 0){
         Serial.println("wifi 连接超时");
-        return;
+        return 0;
     }
     else{
         Serial.println("连接成功");
@@ -43,6 +47,7 @@ WiFiCommunication::WiFiCommunication(String ssid, String password):_server(8080)
         }
     }
 }
+
 bool WiFiCommunication::write(String text){
     
     if (_client.connected()){
